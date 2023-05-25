@@ -39,7 +39,7 @@ class SaleOrder(models.Model):
             for line in order.order_line:
                 amount_untaxed += line.price_subtotal
                 amount_tax += line.price_tax
-                amount_discount += (line.product_uom_qty * line.price_unit * line.discount) / 100
+                amount_discount += (line.product_uom_qty * line.price_unit * line.discount)
             order.update({
                 'amount_untaxed': amount_untaxed,
                 'amount_tax': amount_tax,
@@ -73,14 +73,14 @@ class SaleOrder(models.Model):
                 for line in order.order_line:
                     total += round((line.product_uom_qty * line.price_unit))
                 if order.discount_rate != 0:
-                    discount = (order.discount_rate / total) * 100
+                    discount = (order.discount_rate )
                 else:
                     discount = order.discount_rate
                 for line in order.order_line:
                     line.discount = discount
                     # print(line.discount)
-                    new_sub_price = (line.price_unit * (discount/100))
-                    line.total_discount = line.price_unit - new_sub_price
+                    new_sub_price = (line.price_unit * discount)
+                    line.total_discount = line.price_unit + new_sub_price
 
     def _prepare_invoice(self, ):
         invoice_vals = super(SaleOrder, self)._prepare_invoice()
